@@ -1,0 +1,593 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sorry Card</title>
+  <style>
+    :root {
+      --blue-a: #d8efff;
+      --blue-b: #8bd1ff;
+      --blue-c: #2c84ff;
+      --pink-a: #ffe1ef;
+      --pink-b: #ff9ec9;
+      --pink-c: #ff4d9a;
+      --ink: #123b60;
+      --glass: rgba(255, 255, 255, 0.82);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(-45deg, var(--blue-a), var(--pink-a), #dce8ff, #ffd8ea);
+      background-size: 320% 320%;
+      animation: sky 12s ease infinite;
+      display: grid;
+      place-items: center;
+      position: relative;
+      padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+
+    @keyframes sky {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(55px);
+      opacity: 0.42;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    .g1 {
+      width: 24rem;
+      height: 24rem;
+      background: var(--blue-c);
+      left: -8rem;
+      bottom: -8rem;
+    }
+
+    .g2 {
+      width: 26rem;
+      height: 26rem;
+      background: var(--pink-c);
+      right: -8rem;
+      top: -8rem;
+      animation-delay: 1.1s;
+    }
+
+    @keyframes float {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-24px) scale(1.07); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 4;
+      width: min(92vw, 760px);
+      max-height: calc(100vh - 28px);
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 28px;
+      box-shadow: 0 25px 65px rgba(17, 55, 90, 0.24);
+      backdrop-filter: blur(6px);
+      padding: 2rem 1.25rem 2.2rem;
+      overflow: auto;
+      animation: rise 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .card::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .card::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: linear-gradient(var(--blue-c), var(--pink-c));
+    }
+
+    @keyframes rise {
+      from { transform: translateY(18px) scale(0.96); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 0 auto 0.8rem;
+      padding: 0.42rem 0.95rem;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 0.8rem;
+      letter-spacing: 0.07em;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--blue-c), var(--pink-c));
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(1.7rem, 4.7vw, 2.7rem);
+      line-height: 1.25;
+    }
+
+    .heart {
+      display: inline-block;
+      color: #ff2e8a;
+      animation: beat 0.9s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(0.95); }
+      75% { transform: scale(1.15); }
+    }
+
+    .lines {
+      margin: 1.25rem auto 0;
+      max-width: 640px;
+      display: grid;
+      gap: 0.72rem;
+    }
+
+    .line {
+      border-radius: 14px;
+      border: 1px solid rgba(40, 120, 180, 0.14);
+      background: linear-gradient(90deg, rgba(139, 209, 255, 0.22), rgba(255, 158, 201, 0.2));
+      padding: 0.82rem 0.9rem;
+      font-size: clamp(0.95rem, 2.7vw, 1.08rem);
+      line-height: 1.55;
+      transform: translateY(8px);
+      opacity: 0;
+      animation: reveal 0.7s forwards;
+    }
+
+    .line:nth-child(1) { animation-delay: 0.25s; }
+    .line:nth-child(2) { animation-delay: 0.55s; }
+    .line:nth-child(3) { animation-delay: 0.85s; }
+    .line:nth-child(4) { animation-delay: 1.15s; }
+    .line:nth-child(5) { animation-delay: 1.45s; }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question {
+      margin: 1.4rem 0 0.65rem;
+      text-align: center;
+      font-weight: 800;
+      font-size: clamp(1.08rem, 3.2vw, 1.4rem);
+      color: #0f3a60;
+    }
+
+    .buttons {
+      position: relative;
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.82rem 1.6rem;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.25s ease;
+      color: #fff;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active { transform: scale(0.96); }
+
+    #yesBtn {
+      background: linear-gradient(90deg, #1c8dff, #ff4d9a);
+      box-shadow: 0 10px 22px rgba(34, 126, 233, 0.3);
+      z-index: 5;
+    }
+
+    #yesBtn:hover { box-shadow: 0 14px 26px rgba(34, 126, 233, 0.45); }
+
+    #noBtn {
+      background: linear-gradient(90deg, #689bc2, #7e8ca8);
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 9;
+      box-shadow: 0 9px 18px rgba(52, 78, 112, 0.35);
+      transform: translate3d(58vw, 72vh, 0);
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      will-change: transform;
+    }
+
+    .celebrate {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 30;
+      overflow: hidden;
+      display: none;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 18px;
+      top: -20px;
+      opacity: 0.95;
+      animation: confall linear forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes confall {
+      to {
+        transform: translate3d(0, 110vh, 0) rotate(680deg);
+        opacity: 1;
+      }
+    }
+
+    .flower {
+      position: absolute;
+      top: -10vh;
+      font-size: 1.7rem;
+      animation: flowerFall linear forwards;
+      filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.2));
+      will-change: transform, opacity;
+    }
+
+    @keyframes flowerFall {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.95; }
+      100% { transform: translate3d(0, 116vh, 0) rotate(240deg); opacity: 0.9; }
+    }
+
+    .burst {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      animation: blast 0.9s ease-out forwards;
+      opacity: 0.95;
+      will-change: transform, opacity;
+    }
+
+    @keyframes blast {
+      to {
+        transform: translate(var(--tx), var(--ty)) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    .success {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      z-index: 35;
+      background: rgba(255, 255, 255, 0.93);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 18px;
+      padding: 1rem 1.2rem;
+      color: #0d3f69;
+      font-weight: 800;
+      font-size: clamp(1rem, 3.1vw, 1.35rem);
+      box-shadow: 0 16px 38px rgba(15, 63, 105, 0.2);
+      display: none;
+      text-align: center;
+      min-width: min(88vw, 540px);
+      max-width: min(92vw, 560px);
+      animation: pop 0.45s ease forwards;
+    }
+
+    @keyframes pop {
+      to { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    @media (max-width: 900px) {
+      .card {
+        width: min(94vw, 760px);
+        padding: 1.7rem 1.05rem 1.85rem;
+      }
+      .line {
+        padding: 0.75rem 0.8rem;
+      }
+      .buttons {
+        min-height: 82px;
+      }
+      button {
+        padding: 0.75rem 1.3rem;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        place-items: start center;
+      }
+      .card {
+        width: 100%;
+        margin-top: 6px;
+        max-height: calc(100vh - 22px);
+        padding: 1.35rem 0.82rem 1.5rem;
+        border-radius: 20px;
+      }
+      h1 {
+        line-height: 1.2;
+      }
+      .tag {
+        font-size: 0.72rem;
+        padding: 0.38rem 0.78rem;
+      }
+      .lines {
+        margin-top: 1rem;
+        gap: 0.55rem;
+      }
+      .line {
+        border-radius: 12px;
+        font-size: 0.95rem;
+        line-height: 1.42;
+      }
+      .question {
+        margin-top: 1rem;
+      }
+      .buttons {
+        min-height: 72px;
+      }
+      button {
+        font-size: 0.95rem;
+        padding: 0.68rem 1.15rem;
+      }
+      .success {
+        padding: 0.85rem 0.9rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .card {
+        padding: 1.2rem 0.7rem 1.35rem;
+      }
+      .line {
+        font-size: 0.9rem;
+      }
+      .question {
+        font-size: 1rem;
+      }
+      button {
+        font-size: 0.88rem;
+        padding: 0.62rem 0.98rem;
+      }
+    }
+
+    @media (max-height: 700px) {
+      .card {
+        max-height: calc(100vh - 18px);
+      }
+      .g1, .g2 {
+        transform: scale(0.8);
+      }
+    }
+
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        place-items: start center;
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+      .card {
+        max-height: calc(100vh - 16px);
+      }
+      h1 {
+        font-size: clamp(1.25rem, 3.3vw, 1.7rem);
+      }
+      .line {
+        font-size: 0.9rem;
+        line-height: 1.35;
+        padding: 0.58rem 0.68rem;
+      }
+      .buttons {
+        min-height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+
+  <section class="card">
+    <div style="text-align:center;">
+      <span class="tag">Only For You 💙💗</span>
+    </div>
+
+    <h1>
+      Sorry Meri Jaan <span class="heart">❤️</span><br />
+      Dil Se Maafi Chahta Hoon 🥺
+    </h1>
+
+    <div class="lines">
+      <p class="line">💙 Tere bina har khushi adhoori lagti hai, jaise saans ho par zindagi na ho.</p>
+      <p class="line">💗 Galti meri thi, par mohabbat meri har dhadkan se bhi zyada sachchi hai.</p>
+      <p class="line">💖 Tera gussa bhi pyaara hai, bas tu baat kar le to dil ko sukoon milta hai.</p>
+      <p class="line">💕 Main waada karta hoon: tujhe rulane nahi, sirf hasaane ke liye jeeyunga.</p>
+      <p class="line">❤️ Tu maan ja na... kyunki mera dil sirf tera naam leta hai.</p>
+    </div>
+
+    <p class="question">Tumne mujhe maaf kar diya na? 🥹💞</p>
+
+    <div class="buttons">
+      <button id="yesBtn" type="button">Yes 💖</button>
+    </div>
+  </section>
+
+  <button id="noBtn" type="button" aria-label="No">No 😢</button>
+
+  <div class="celebrate" id="celebrate"></div>
+  <div class="success" id="successMsg">Yayyy! Tum maan gayi ❤️💐<br />I love you so much 💙💗</div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const celebrate = document.getElementById('celebrate');
+    const successMsg = document.getElementById('successMsg');
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(value, max));
+    }
+
+    let noX = 0;
+    let noY = 0;
+    let noW = 0;
+    let noH = 0;
+    let pointerX = window.innerWidth / 2;
+    let pointerY = window.innerHeight / 2;
+    let evadeTicking = false;
+
+    function updateButtonMetrics() {
+      noW = noBtn.offsetWidth;
+      noH = noBtn.offsetHeight;
+    }
+
+    function renderNoButton() {
+      noBtn.style.transform = 'translate3d(' + noX + 'px,' + noY + 'px,0)';
+    }
+
+    function moveNoButton() {
+      const pad = 14;
+      noX = Math.random() * (window.innerWidth - noW - pad * 2) + pad;
+      noY = Math.random() * (window.innerHeight - noH - pad * 2) + pad;
+      renderNoButton();
+    }
+
+    function evadeNow() {
+      const cx = noX + noW / 2;
+      const cy = noY + noH / 2;
+      const near = Math.hypot(pointerX - cx, pointerY - cy) < 125;
+
+      if (!near) return;
+
+      const dx = cx - pointerX;
+      const dy = cy - pointerY;
+      const mag = Math.max(1, Math.hypot(dx, dy));
+      const jump = 145;
+      const nx = cx + (dx / mag) * jump - noW / 2;
+      const ny = cy + (dy / mag) * jump - noH / 2;
+
+      noX = clamp(nx, 10, window.innerWidth - noW - 10);
+      noY = clamp(ny, 10, window.innerHeight - noH - 10);
+      renderNoButton();
+    }
+
+    function scheduleEvade(e) {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      if (evadeTicking) return;
+      evadeTicking = true;
+      requestAnimationFrame(function () {
+        evadeTicking = false;
+        evadeNow();
+      });
+    }
+
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('pointermove', scheduleEvade, { passive: true });
+    noBtn.addEventListener('touchstart', moveNoButton, { passive: true });
+    noBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      moveNoButton();
+    });
+    document.addEventListener('pointermove', scheduleEvade, { passive: true });
+
+    function burstAt(x, y) {
+      const colors = ['#ff4d9a', '#2c84ff', '#ffd166', '#7cf7b9', '#ffffff'];
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < 18; i++) {
+        const b = document.createElement('span');
+        b.className = 'burst';
+        const angle = (Math.PI * 2 * i) / 18;
+        const dist = 60 + Math.random() * 95;
+        b.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+        b.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+        b.style.left = x + 'px';
+        b.style.top = y + 'px';
+        b.style.background = colors[Math.floor(Math.random() * colors.length)];
+        frag.appendChild(b);
+        setTimeout(() => b.remove(), 900);
+      }
+      celebrate.appendChild(frag);
+    }
+
+    function confettiRain() {
+      const colors = ['#ff4d9a', '#2c84ff', '#f7b801', '#7dffda', '#ffffff', '#ff7ab8'];
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < 120; i++) {
+        const c = document.createElement('span');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDuration = (2.8 + Math.random() * 2.4).toFixed(2) + 's';
+        c.style.animationDelay = (Math.random() * 1.4).toFixed(2) + 's';
+        c.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+        frag.appendChild(c);
+        setTimeout(() => c.remove(), 6000);
+      }
+      celebrate.appendChild(frag);
+    }
+
+    function flowerRain() {
+      const flowers = ['🌸', '🌹', '🌺', '💐', '🌷', '🌼'];
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < 80; i++) {
+        const f = document.createElement('span');
+        f.className = 'flower';
+        f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+        f.style.left = Math.random() * 100 + 'vw';
+        f.style.animationDuration = (4 + Math.random() * 4).toFixed(2) + 's';
+        f.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        f.style.fontSize = (1.2 + Math.random() * 1.2).toFixed(2) + 'rem';
+        frag.appendChild(f);
+        setTimeout(() => f.remove(), 9000);
+      }
+      celebrate.appendChild(frag);
+    }
+
+    yesBtn.addEventListener('click', function () {
+      celebrate.style.display = 'block';
+      successMsg.style.display = 'block';
+
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      burstAt(cx, cy);
+      setTimeout(() => burstAt(cx * 0.35, cy * 0.75), 220);
+      setTimeout(() => burstAt(cx * 1.65, cy * 0.8), 420);
+
+      confettiRain();
+      flowerRain();
+
+      yesBtn.disabled = true;
+      yesBtn.textContent = 'Love You ❤️';
+    });
+
+    window.addEventListener('resize', () => {
+      updateButtonMetrics();
+      moveNoButton();
+    });
+
+    updateButtonMetrics();
+    moveNoButton();
+  </script>
+</body>
+</html>
